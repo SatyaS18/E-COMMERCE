@@ -12,6 +12,7 @@ connectDatabase();
 
 //creating a server
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, (err) => {
+  if (err) console.log(`Error: ${err}`);
   console.log(`Server is working on http://localhost:${process.env.PORT}`);
 });
