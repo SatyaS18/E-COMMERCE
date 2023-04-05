@@ -4,10 +4,9 @@ const connectDatabase = require("./config/database");
 
 //config
 
-dotenv.config({ path: "backend/config/config.env" });
+dotenv.config({ path: "backend/config/config.env" }); //it loads the environment variable from the config.env file and puts it in the process.env object
 
-//connectiong to database
-
+//connecting to database
 connectDatabase();
 
 //creating a server
