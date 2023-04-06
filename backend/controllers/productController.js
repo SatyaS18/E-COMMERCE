@@ -17,6 +17,25 @@ exports.getAllProducts = async (req, res) => {
   res.status(200).json({ success: true, products });
 };
 
+//GET PRODUCT DETAILS
+exports.getProductDetails = async (req, res) => {
+  const id = req.params.id;
+  const product = await Product.findById(id);
+
+  //check if product already exists or not
+  if (!product) {
+    return res.status(500).json({
+      success: false,
+      message: "Product not found",
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    product,
+  });
+};
+
 //Update Product
 exports.updateProduct = async (req, res) => {
   const id = req.params.id;
