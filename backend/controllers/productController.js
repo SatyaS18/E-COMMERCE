@@ -1,25 +1,36 @@
 const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
+const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
 //create product --ADMIN
 
-exports.createProduct = async (req, res, next) => {
+// exports.createProduct = async (req, res, next) => {
+//   const product = await Product.create(req.body);
+//   res.status(201).json({
+//     success: true,
+//     product,
+//   });
+// };
+//in create product, if an input parameter is missing in the req.body, then it will be an error, so we create a middleware to handle the error called catchAsyncError
+
+exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.create(req.body);
+
   res.status(201).json({
     success: true,
     product,
   });
-};
+});
 
 //GET ALL Product
 
-exports.getAllProducts = async (req, res, next) => {
+exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
   const products = await Product.find(); //gets all products
   res.status(200).json({ success: true, products });
-};
+});
 
 //GET PRODUCT DETAILS
-exports.getProductDetails = async (req, res, next) => {
+exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findById(id);
 
@@ -37,10 +48,10 @@ exports.getProductDetails = async (req, res, next) => {
     success: true,
     product,
   });
-};
+});
 
 //Update Product
-exports.updateProduct = async (req, res, next) => {
+exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
   const update = req.body;
   const options = { new: true, runValidators: true, useFindAndModify: false };
@@ -58,10 +69,10 @@ exports.updateProduct = async (req, res, next) => {
     success: true,
     product,
   });
-};
+});
 
 //DELETE PRODUCT
-exports.deleteProduct = async (req, res, next) => {
+exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findById(id);
 
@@ -75,4 +86,4 @@ exports.deleteProduct = async (req, res, next) => {
     success: true,
     message: "Product removed successfully",
   });
-};
+});
