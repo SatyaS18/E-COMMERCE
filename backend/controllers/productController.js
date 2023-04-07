@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const ErrorHandler = require("../utils/errorHandler");
 
 //create product --ADMIN
 
@@ -12,22 +13,24 @@ exports.createProduct = async (req, res, next) => {
 
 //GET ALL Product
 
-exports.getAllProducts = async (req, res) => {
+exports.getAllProducts = async (req, res, next) => {
   const products = await Product.find(); //gets all products
   res.status(200).json({ success: true, products });
 };
 
 //GET PRODUCT DETAILS
-exports.getProductDetails = async (req, res) => {
+exports.getProductDetails = async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findById(id);
 
   //check if product already exists or not
   if (!product) {
-    return res.status(500).json({
-      success: false,
-      message: "Product not found",
-    });
+    // return res.status(500).json({
+    //   success: false,
+    //   message: "Product not found",
+    // });
+
+    return next(new ErrorHandler("Product not found", 404));
   }
 
   res.status(200).json({
@@ -37,7 +40,7 @@ exports.getProductDetails = async (req, res) => {
 };
 
 //Update Product
-exports.updateProduct = async (req, res) => {
+exports.updateProduct = async (req, res, next) => {
   const id = req.params.id;
   const update = req.body;
   const options = { new: true, runValidators: true, useFindAndModify: false };
@@ -46,10 +49,7 @@ exports.updateProduct = async (req, res) => {
 
   //check if product already exists or not
   if (!product) {
-    return res.status(500).json({
-      success: false,
-      message: "Product not found",
-    });
+    return next(new ErrorHandler("Product not found", 404));
   }
 
   product = await Product.findByIdAndUpdate(id, update, options); //options returns the update product
@@ -61,15 +61,12 @@ exports.updateProduct = async (req, res) => {
 };
 
 //DELETE PRODUCT
-exports.deleteProduct = async (req, res) => {
+exports.deleteProduct = async (req, res, next) => {
   const id = req.params.id;
   const product = await Product.findById(id);
 
   if (!product) {
-    return res.status(500).json({
-      success: false,
-      message: "Product not found",
-    });
+    return next(new ErrorHandler("Product not found", 404));
   }
 
   await product.remove();
