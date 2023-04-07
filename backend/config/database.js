@@ -13,10 +13,11 @@ const connectDatabase = () => {
     })
     .then((data) => {
       console.log(`Mongodb connected with server: ${data.connection.host}`);
-    })
-    .catch((err) => {
-      console.log(err);
     });
+  // .catch((err) => {
+  //   console.log(err);
+  // });
+  //we commented it so that error will be unhandled when promise is rejected
 };
 
 module.exports = connectDatabase;
